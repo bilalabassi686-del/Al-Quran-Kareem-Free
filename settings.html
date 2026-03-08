@@ -39,16 +39,17 @@
 body {
     background: linear-gradient(135deg, #0b3d91, #1e90ff);
     font-family: Arial, sans-serif;
+    transition: background 0.5s;
 }
 
-/* Card Design with Gradient */
+/* Card Gradient */
 .setting-card {
     background: linear-gradient(145deg, #00b894, #006400);
     border-radius:12px;
     padding:15px;
     margin:12px 20px;
     box-shadow:0 6px 15px rgba(0,0,0,0.3);
-    transition: transform 0.3s, box-shadow 0.3s;
+    transition: transform 0.3s, box-shadow 0.3s, background 0.5s;
     color: #fff;
 }
 .setting-card:hover {
@@ -56,7 +57,7 @@ body {
     box-shadow:0 10px 25px rgba(0,0,0,0.4);
 }
 
-/* Buttons Gradient */
+/* Buttons */
 .setting-btn, .setting-btn-small {
     padding:10px 20px;
     border:none;
@@ -72,11 +73,9 @@ body {
     background: linear-gradient(135deg, #32CD32, #228B22);
     transform: scale(1.05);
 }
-
-/* Small Buttons */
 .setting-btn-small { font-size:0.9rem; padding:8px 15px; }
 
-/* Reset Button Gradient */
+/* Reset Button */
 .reset-btn {
     background: linear-gradient(135deg, #B22222, #FF6347);
 }
@@ -84,7 +83,7 @@ body {
     background: linear-gradient(135deg, #FF4500, #B22222);
 }
 
-/* Dark Mode Overrides */
+/* Dark Mode */
 .dark-mode body {
     background: linear-gradient(135deg, #0c2d5e, #0a52a0);
 }
@@ -103,38 +102,44 @@ body {
 
 <script>
 // ===== Dark Mode =====
+let isDark = localStorage.getItem('darkMode') === 'true';
+if(isDark) document.body.classList.add('dark-mode');
+
 function toggleTheme(){
     document.body.classList.toggle('dark-mode');
+    localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
 }
 
 // ===== Notifications =====
-let notificationsEnabled = false;
+let notificationsEnabled = localStorage.getItem('notifications') === 'true';
 function toggleNotifications(){
     notificationsEnabled = !notificationsEnabled;
-    alert('Notifications ' + (notificationsEnabled ? 'Enabled' : 'Disabled'));
-}
-
-// ===== Font Size =====
-let fontSize = 16;
-function increaseFont(){
-    fontSize += 2;
-    document.querySelectorAll('section, p, div').forEach(el=>el.style.fontSize=fontSize+'px');
-}
-function decreaseFont(){
-    if(fontSize>10){
-        fontSize -= 2;
-        document.querySelectorAll('section, p, div').forEach(el=>el.style.fontSize=fontSize+'px');
+    localStorage.setItem('notifications', notificationsEnabled);
+    if(notificationsEnabled && "Notification" in window){
+        Notification.requestPermission().then(p => {
+            if(p === "granted") new Notification("Notifications Enabled!");
+        });
+    } else {
+        alert('Notifications ' + (notificationsEnabled ? 'Enabled' : 'Disabled'));
     }
 }
 
-// ===== Audio Autoplay =====
-let autoplay = false;
-function toggleAutoplay(){
-    autoplay = !autoplay;
-    alert('Audio autoplay ' + (autoplay ? 'Enabled' : 'Disabled'));
+// ===== Font Size =====
+let fontSize = localStorage.getItem('fontSize') ? parseInt(localStorage.getItem('fontSize')) : 16;
+function applyFontSize(){
+    document.querySelectorAll('.setting-card, section, p, div, .arabic, .english, .surah-item').forEach(el=>{
+        el.style.fontSize = fontSize+'px';
+    });
 }
+function increaseFont(){ if(fontSize<40) fontSize+=2; localStorage.setItem('fontSize', fontSize); applyFontSize(); }
+function decreaseFont(){ if(fontSize>12) fontSize-=2; localStorage.setItem('fontSize', fontSize); applyFontSize(); }
+applyFontSize();
 
-// ===== Reset App (Owner Only) =====
+// ===== Audio Autoplay =====
+let autoplay = localStorage.getItem('autoplay') === 'true';
+function toggleAutoplay(){ autoplay = !autoplay; localStorage.setItem('autoplay', autoplay); alert('Audio autoplay ' + (autoplay ? 'Enabled' : 'Disabled')); }
+
+// ===== Reset App =====
 function resetApp(){
     if(confirm("Are you sure you want to reset the app?")){
         localStorage.clear();
