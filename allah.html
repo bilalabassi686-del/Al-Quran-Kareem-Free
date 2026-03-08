@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>99 Names of Allah</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Amiri&display=swap" rel="stylesheet">
+
+<style>
+
+body{
+margin:0;
+font-family:Arial;
+background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+color:white;
+}
+
+h1{
+text-align:center;
+padding:20px;
+margin:0;
+}
+
+.container{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:14px;
+padding:16px;
+max-width:700px;
+margin:auto;
+}
+
+.card{
+padding:24px;
+border-radius:18px;
+text-align:center;
+border:2px solid #3aa0ff;
+background:linear-gradient(135deg,#0072ff,#00c6ff);
+transition:0.3s;
+cursor:pointer;
+}
+
+.card:hover{
+transform:translateY(-6px);
+box-shadow:0 12px 24px rgba(0,0,0,0.4);
+}
+
+.number{
+font-size:14px;
+opacity:0.8;
+}
+
+.arabic{
+font-family:'Amiri',serif;
+font-size:32px;
+margin-top:8px;
+}
+
+.meaning{
+font-size:13px;
+margin-top:8px;
+display:none;
+opacity:0.9;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>🕌 99 Names of Allah</h1>
+
+<div class="container" id="names"></div>
+
+<script>
+
+const names = [
+
+["ٱلرَّحْمَـٰنُ","The Most Merciful"],
+["ٱلرَّحِيمُ","The Most Compassionate"],
+["ٱلْمَلِكُ","The King"],
+["ٱلْقُدُّوسُ","The Most Holy"],
+["ٱلسَّلَامُ","The Source of Peace"],
+["ٱلْمُؤْمِنُ","The Giver of Faith"],
+["ٱلْمُهَيْمِنُ","The Protector"],
+["ٱلْعَزِيزُ","The Almighty"],
+["ٱلْجَبَّارُ","The Compeller"],
+["ٱلْمُتَكَبِّرُ","The Supreme"],
+["ٱلْخَالِقُ","The Creator"],
+["ٱلْبَارِئُ","The Maker"],
+["ٱلْمُصَوِّرُ","The Fashioner"],
+["ٱلْغَفَّارُ","The Forgiver"],
+["ٱلْقَهَّارُ","The Subduer"],
+["ٱلْوَهَّابُ","The Bestower"],
+["ٱلرَّزَّاقُ","The Provider"],
+["ٱلْفَتَّاحُ","The Opener"],
+["ٱلْعَلِيمُ","The All-Knowing"],
+["ٱلْقَابِضُ","The Withholder"],
+["ٱلْبَاسِطُ","The Extender"],
+["ٱلْخَافِضُ","The Reducer"],
+["ٱلرَّافِعُ","The Exalter"],
+["ٱلْمُعِزُّ","The Honourer"],
+["ٱلْمُذِلُّ","The Dishonourer"],
+["ٱلسَّمِيعُ","The All Hearing"],
+["ٱلْبَصِيرُ","The All Seeing"],
+["ٱلْحَكَمُ","The Judge"],
+["ٱلْعَدْلُ","The Just"],
+["ٱللَّطِيفُ","The Subtle One"],
+["ٱلْخَبِيرُ","The All Aware"],
+["ٱلْحَلِيمُ","The Forbearing"],
+["ٱلْعَظِيمُ","The Magnificent"],
+["ٱلْغَفُورُ","The Forgiving"],
+["ٱلشَّكُورُ","The Appreciative"],
+["ٱلْعَلِيُّ","The Most High"],
+["ٱلْكَبِيرُ","The Most Great"],
+["ٱلْحَفِيظُ","The Preserver"],
+["ٱلْمُقِيتُ","The Nourisher"],
+["ٱلْحَسِيبُ","The Reckoner"],
+["ٱلْجَلِيلُ","The Majestic"],
+["ٱلْكَرِيمُ","The Generous"],
+["ٱلرَّقِيبُ","The Watchful"],
+["ٱلْمُجِيبُ","The Responsive"],
+["ٱلْوَاسِعُ","The All-Encompassing"],
+["ٱلْحَكِيمُ","The Wise"],
+["ٱلْوَدُودُ","The Loving"],
+["ٱلْمَجِيدُ","The Glorious"],
+["ٱلْبَاعِثُ","The Resurrector"],
+["ٱلشَّهِيدُ","The Witness"],
+["ٱلْحَقُّ","The Truth"],
+["ٱلْوَكِيلُ","The Trustee"],
+["ٱلْقَوِيُّ","The Strong"],
+["ٱلْمَتِينُ","The Firm"],
+["ٱلْوَلِيُّ","The Protecting Friend"],
+["ٱلْحَمِيدُ","The Praiseworthy"],
+["ٱلْمُحْصِي","The Accounter"],
+["ٱلْمُبْدِئُ","The Originator"],
+["ٱلْمُعِيدُ","The Restorer"],
+["ٱلْمُحْيِي","The Giver of Life"],
+["ٱلْمُمِيتُ","The Creator of Death"],
+["ٱلْحَيُّ","The Ever Living"],
+["ٱلْقَيُّومُ","The Sustainer"],
+["ٱلْوَاجِدُ","The Finder"],
+["ٱلْمَاجِدُ","The Noble"],
+["ٱلْوَاحِدُ","The One"],
+["ٱلْأَحَدُ","The Unique"],
+["ٱلصَّمَدُ","The Eternal"],
+["ٱلْقَادِرُ","The Able"],
+["ٱلْمُقْتَدِرُ","The Powerful"],
+["ٱلْمُقَدِّمُ","The Expediter"],
+["ٱلْمُؤَخِّرُ","The Delayer"],
+["ٱلْأَوَّلُ","The First"],
+["ٱلْآخِرُ","The Last"],
+["ٱلظَّاهِرُ","The Manifest"],
+["ٱلْبَاطِنُ","The Hidden"],
+["ٱلْوَالِي","The Governor"],
+["ٱلْمُتَعَالِي","The Exalted"],
+["ٱلْبَرُّ","The Good"],
+["ٱلتَّوَّابُ","The Acceptor of Repentance"],
+["ٱلْمُنْتَقِمُ","The Avenger"],
+["ٱلْعَفُوُّ","The Pardoner"],
+["ٱلرَّؤُوفُ","The Kind"],
+["مَالِكُ ٱلْمُلْكِ","Master of the Kingdom"],
+["ذُو ٱلْجَلَالِ وَٱلْإِكْرَامِ","Lord of Glory"],
+["ٱلْمُقْسِطُ","The Just One"],
+["ٱلْجَامِعُ","The Gatherer"],
+["ٱلْغَنِيُّ","The Self-Sufficient"],
+["ٱلْمُغْنِي","The Enricher"],
+["ٱلْمَانِعُ","The Preventer"],
+["ٱلضَّارُّ","The Distresser"],
+["ٱلنَّافِعُ","The Benefactor"],
+["ٱلنُّورُ","The Light"],
+["ٱلْهَادِي","The Guide"],
+["ٱلْبَدِيعُ","The Originator"],
+["ٱلْبَاقِي","The Everlasting"],
+["ٱلْوَارِثُ","The Inheritor"],
+["ٱلرَّشِيدُ","The Guide"],
+["ٱلصَّبُورُ","The Patient"]
+
+];
+
+const container = document.getElementById("names");
+
+names.forEach((n,i)=>{
+
+let card = document.createElement("div");
+
+card.className="card";
+
+card.innerHTML=`
+
+<div class="number">${i+1}</div>
+
+<div class="arabic">${n[0]}</div>
+
+<div class="meaning">${n[1]}</div>
+
+`;
+
+card.onclick=()=>{
+
+let m = card.querySelector(".meaning");
+
+m.style.display = m.style.display==="block"?"none":"block";
+
+};
+
+container.appendChild(card);
+
+});
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Al Quran Kareem</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&display=swap" rel="stylesheet">
+
+<style>
+
+body{
+margin:0;
+font-family:Arial;
+min-height:100vh;
+
+background:linear-gradient(-45deg,#0f9d8a,#0a6cff,#00c6ff,#43e97b);
+background-size:400% 400%;
+animation:bgMove 10s ease infinite;
+}
+
+@keyframes bgMove{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
+}
+
+/* Header */
+
+header{
+text-align:center;
+padding:20px;
+font-size:26px;
+font-weight:bold;
+color:white;
+}
+
+/* Grid */
+
+.menu{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:18px;
+padding:20px;
+max-width:700px;
+margin:auto;
+}
+
+/* Cards */
+
+.card{
+
+aspect-ratio:1/1;
+
+border-radius:18px;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+text-align:center;
+font-size:18px;
+font-weight:bold;
+
+color:white;
+
+box-shadow:0 8px 25px rgba(0,0,0,0.3);
+cursor:pointer;
+transition:0.35s;
+
+backdrop-filter:blur(5px);
+}
+
+.card:hover{
+transform:scale(1.08);
+box-shadow:0 12px 30px rgba(0,0,0,0.4);
+}
+
+/* Card gradients */
+
+.quran{background:linear-gradient(135deg,#00c6ff,#0072ff);}
+.para{background:linear-gradient(135deg,#43e97b,#38f9d7);}
+.tasbeeh{background:linear-gradient(135deg,#f7971e,#ffd200);}
+.qibla{background:linear-gradient(135deg,#ff6a00,#ee0979);}
+.dua{background:linear-gradient(135deg,#8e2de2,#4a00e0);}
+.allah{background:linear-gradient(135deg,#11998e,#38ef7d);}
+.prayer{background:linear-gradient(135deg,#fc4a1a,#f7b733);}
+.hadith{background:linear-gradient(135deg,#2193b0,#6dd5ed);}
+.settings{background:linear-gradient(135deg,#757f9a,#d7dde8);color:black;}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+📖 Al Quran Kareem
+</header>
+
+<div class="menu">
+
+<div class="card quran" onclick="location.href='quran.html'">
+📖 Surah + Audio
+</div>
+
+<div class="card para" onclick="location.href='para.html'">
+📜 Para (Juz)
+</div>
+
+<div class="card tasbeeh" onclick="location.href='tasbeeh.html'">
+📿 Tasbeeh
+</div>
+
+<div class="card qibla" onclick="location.href='qibla.html'">
+🧭 Qibla
+</div>
+
+<div class="card dua" onclick="location.href='dua.html'">
+🤲 Dua
+</div>
+
+<div class="card allah" onclick="location.href='allah.html'">
+🕌 99 Names
+</div>
+
+<div class="card prayer" onclick="location.href='prayer.html'">
+🕌 Prayer Time
+</div>
+
+<div class="card hadith" onclick="location.href='hadith.html'">
+🌙 Daily Hadith
+</div>
+
+<div class="card settings" onclick="location.href='settings.html'">
+⚙️ Settings
+</div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Prayer Time with Countdown</title>
+<style>
+body {
+    font-family: Arial;
+    background: linear-gradient(135deg, #0f5132, #064e3b);
+    color: white;
+    text-align: center;
+    margin: 0;
+    padding-bottom: 30px;
+}
+
+header {
+    background: linear-gradient(135deg, #064e3b, #0f5132);
+    padding: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+#city {
+    font-size: 18px;
+    margin-top: 10px;
+}
+
+.container {
+    margin-top: 30px;
+}
+
+/* Gradient Cards */
+.card {
+    background: linear-gradient(145deg, #16a34a, #22c55e);
+    color: white;
+    margin: 10px auto;
+    padding: 20px;
+    width: 80%;
+    border-radius: 12px;
+    font-size: 18px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+}
+
+button {
+    margin-top: 20px;
+    padding: 12px 25px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #16a34a, #22c55e);
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    transition: transform 0.2s, background 0.3s;
+}
+button:hover {
+    transform: scale(1.05);
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+}
+</style>
+</head>
+<body>
+
+<header> Prayer Time</header>
+<div id="city">Detecting Location...</div>
+
+<div class="container">
+    <div class="card"> Fajr: <span id="fajr">--</span></div>
+    <div class="card"> Dhuhr: <span id="dhuhr">--</span></div>
+    <div class="card"> Asr: <span id="asr">--</span></div>
+    <div class="card"> Maghrib: <span id="maghrib">--</span></div>
+    <div class="card"> Isha: <span id="isha">--</span></div>
+    <div class="card"> Next Prayer: <span id="nextPrayer">--</span></div>
+    <div class="card"> Countdown: <span id="countdown">--:--</span></div>
+</div>
+
+<button onclick="getLocation()"> Refresh</button>
+
+<script>
+let prayerTimes = {};
+
+function getLocation() {
+    if(navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position){
+            let lat = position.coords.latitude;
+            let lon = position.coords.longitude;
+
+            fetch(`https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lon}&method=2`)
+            .then(res=>res.json())
+            .then(data=>{
+                prayerTimes = {
+                    Fajr: data.data.timings.Fajr,
+                    Dhuhr: data.data.timings.Dhuhr,
+                    Asr: data.data.timings.Asr,
+                    Maghrib: data.data.timings.Maghrib,
+                    Isha: data.data.timings.Isha
+                };
+
+                document.getElementById("fajr").innerHTML = prayerTimes.Fajr;
+                document.getElementById("dhuhr").innerHTML = prayerTimes.Dhuhr;
+                document.getElementById("asr").innerHTML = prayerTimes.Asr;
+                document.getElementById("maghrib").innerHTML = prayerTimes.Maghrib;
+                document.getElementById("isha").innerHTML = prayerTimes.Isha;
+
+                calculateNextPrayer();
+                startCountdown();
+            });
+        });
+    } else {
+        alert("Location not supported");
+    }
+}
+
+function calculateNextPrayer(){
+    const now = new Date();
+    const prayers = [
+        {name:"Fajr", time: prayerTimes.Fajr},
+        {name:"Dhuhr", time: prayerTimes.Dhuhr},
+        {name:"Asr", time: prayerTimes.Asr},
+        {name:"Maghrib", time: prayerTimes.Maghrib},
+        {name:"Isha", time: prayerTimes.Isha}
+    ];
+
+    let next = {name:"--", time: null};
+    for(let p of prayers){
+        const [h,m] = p.time.split(":");
+        let prayerTime = new Date();
+        prayerTime.setHours(parseInt(h), parseInt(m), 0);
+        if(prayerTime > now){
+            next = p;
+            break;
+        }
+    }
+    document.getElementById("nextPrayer").innerHTML = next.name + " at " + (next.time || "--:--");
+    return next;
+}
+
+function startCountdown(){
+    setInterval(()=>{
+        const next = calculateNextPrayer();
+        if(next.time){
+            const now = new Date();
+            const [h,m] = next.time.split(":");
+            let prayerTime = new Date();
+            prayerTime.setHours(parseInt(h), parseInt(m), 0);
+            let diff = prayerTime - now;
+            if(diff < 0) diff = 0;
+            let minutes = Math.floor(diff / 60000);
+            let seconds = Math.floor((diff % 60000)/1000);
+            document.getElementById("countdown").innerHTML = `${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
+        }
+    },1000);
+}
+
+getLocation();
+</script>
+
+</body>
+</html>

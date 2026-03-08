@@ -1,0 +1,119 @@
+<style>
+
+#hadith{
+max-width:700px;
+margin:auto;
+padding:20px;
+
+/* Gradient background */
+
+background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+
+border-radius:20px;
+}
+
+#hadith h2{
+text-align:center;
+color:#ffffff;
+margin-bottom:15px;
+}
+
+/* Hadith Card */
+
+.hadith-box{
+background:linear-gradient(145deg,#ffffff,#f1f2f6);
+padding:25px;
+border-radius:15px;
+box-shadow:0 10px 25px rgba(0,0,0,0.25);
+border-left:6px solid #2b7cff;
+text-align:center;
+}
+
+/* Upload Button */
+
+#hadithUpload{
+background:linear-gradient(145deg,#2b7cff,#1d5fd1);
+color:white;
+border:none;
+padding:10px 16px;
+border-radius:8px;
+cursor:pointer;
+}
+
+/* Download Button */
+
+.downloadBtn{
+background:linear-gradient(145deg,#00b894,#00a383);
+color:white;
+border:none;
+padding:10px 18px;
+border-radius:8px;
+cursor:pointer;
+margin-top:10px;
+display:none;
+}
+
+/* Image */
+
+#hadithImg{
+margin-top:15px;
+max-width:100%;
+border-radius:12px;
+box-shadow:0 6px 18px rgba(0,0,0,0.25);
+}
+
+</style>
+
+
+<section id="hadith" class="hidden">
+
+<div class="hadith-box">
+
+<h2>📖 Daily Hadith</h2>
+
+<input type="file" accept="image/*" id="hadithUpload" onchange="loadHadith(event)">
+
+<br><br>
+
+<img id="hadithImg" style="display:none;">
+
+<br>
+
+<button class="downloadBtn" id="downloadBtn" onclick="downloadImage()">Save Image</button>
+
+</div>
+
+<script>
+
+function loadHadith(event){
+
+const img = document.getElementById('hadithImg');
+const btn = document.getElementById('downloadBtn');
+
+img.src = URL.createObjectURL(event.target.files[0]);
+
+img.style.display = 'block';
+
+btn.style.display = "inline-block";
+
+}
+
+/* Download image */
+
+function downloadImage(){
+
+const img = document.getElementById("hadithImg");
+
+const link = document.createElement("a");
+
+link.href = img.src;
+
+link.download = "hadith-image.jpg";
+
+link.click();
+
+}
+
+</script>
+
+</section>

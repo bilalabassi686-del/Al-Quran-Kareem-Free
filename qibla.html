@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Qibla Compass with Kaaba</title>
+<style>
+body {
+    margin:0;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background: linear-gradient(to bottom, #0b3d91, #1e90ff);
+    color: #fff;
+}
+
+header {
+    background: linear-gradient(45deg,#0a7b3e,#00b894);
+    color: white;
+    text-align: center;
+    padding: 18px;
+    font-size: 22px;
+    font-weight: bold;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+    width: 100%;
+}
+
+#compass {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    margin: 30px 0;
+    border-radius: 50%;
+    background: radial-gradient(circle at center, #f5d76e, #d4ac0d);
+    border: 7px solid #ffd700;
+    box-shadow: 0 0 25px rgba(0,0,0,0.4);
+    overflow: hidden;
+    transition: transform 0.2s ease-out;
+}
+
+#needle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 6px;
+    height: 140px;
+    background: red;
+    transform-origin: bottom center;
+    transform: translate(-50%, -100%) rotate(0deg);
+    border-radius: 3px;
+    box-shadow: 0 0 10px rgba(255,0,0,0.7);
+    transition: transform 0.2s ease-out;
+}
+
+#kaaba-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 30px;       /* Kaaba circle size */
+    height: 30px;
+    background: #ff4d4d; /* Red circle */
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 15px #ff9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 18px;
+    color: white;
+}
+
+.direction {
+    position: absolute;
+    font-weight: bold;
+    font-size: 20px;
+    text-shadow: 1px 1px 3px #000;
+}
+
+#north { top:10px; left:50%; transform: translateX(-50%); }
+#south { bottom:10px; left:50%; transform: translateX(-50%); }
+#east  { right:10px; top:50%; transform: translateY(-50%); }
+#west  { left:10px; top:50%; transform: translateY(-50%); }
+
+button {
+    padding: 12px 25px;
+    font-size: 16px;
+    background: #0a7b3e;
+    color: #fff;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    box-shadow:0 3px 8px rgba(0,0,0,0.2);
+    transition: 0.2s;
+}
+button:hover {
+    transform: scale(1.05);
+}
+</style>
+</head>
+<body>
+
+<header> Professional Qibla Compass</header>
+
+<div id="compass">
+    <div id="needle"></div>
+    <div id="kaaba-center"></div>
+    <div id="north" class="direction">N</div>
+    <div id="south" class="direction">S</div>
+    <div id="east" class="direction">E</div>
+    <div id="west" class="direction">W</div>
+</div>
+
+<button onclick="startQibla()">Start Qibla</button>
+
+<script>
+let qibla = 0;
+
+function toRadians(deg){ return deg * Math.PI / 180; }
+function toDegrees(rad){ return rad * 180 / Math.PI; }
+
+function startQibla(){
+    navigator.geolocation.getCurrentPosition(pos=>{
+        let lat = toRadians(pos.coords.latitude);
+        let lon = toRadians(pos.coords.longitude);
+        let makkahLat = toRadians(21.4225);
+        let makkahLon = toRadians(39.8262);
+
+        let dLon = makkahLon - lon;
+        let y = Math.sin(dLon) * Math.cos(makkahLat);
+        let x = Math.cos(lat)*Math.sin(makkahLat) - Math.sin(lat)*Math.cos(makkahLat)*Math.cos(dLon);
+
+        let brng = Math.atan2(y,x);
+        qibla = (toDegrees(brng) + 360) % 360;
+    });
+
+    window.addEventListener("deviceorientation", e=>{
+        let compassHeading = e.alpha;
+        if(e.webkitCompassHeading) compassHeading = e.webkitCompassHeading;
+
+        if(compassHeading !== null){
+            let rotation = qibla - compassHeading;
+
+            // Smooth needle movement
+            document.getElementById("needle").style.transform = `translate(-50%,-100%) rotate(${rotation}deg)`;
+
+            // Slight compass face rotation effect
+            document.getElementById("compass").style.transform = `rotate(${-compassHeading/4}deg)`;
+        }
+    }, true);
+}
+</script>
+
+</body>
+</html>

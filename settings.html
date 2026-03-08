@@ -1,0 +1,144 @@
+<section id="settings">
+    <h2 style="text-align:center; color:#fff; font-size:1.8rem; margin-bottom:20px; text-shadow:2px 2px 6px rgba(0,0,0,0.4);">⚙️ Settings</h2>
+
+    <div class="setting-card">
+        <h3>🌗 Theme</h3>
+        <button class="setting-btn" onclick="toggleTheme()">Toggle Light / Dark Mode</button>
+    </div>
+
+    <div class="setting-card">
+        <h3>🔔 Notifications</h3>
+        <button class="setting-btn" onclick="toggleNotifications()">Toggle Notifications</button>
+    </div>
+
+    <div class="setting-card">
+        <h3>🔠 Font Size</h3>
+        <div style="display:flex; gap:10px;">
+            <button class="setting-btn-small" onclick="increaseFont()">A+</button>
+            <button class="setting-btn-small" onclick="decreaseFont()">A-</button>
+        </div>
+    </div>
+
+    <div class="setting-card">
+        <h3>🎧 Audio</h3>
+        <button class="setting-btn" onclick="toggleAutoplay()">Toggle Audio Autoplay</button>
+    </div>
+
+    <div class="setting-card">
+        <h3>⚠️ Reset App (Owner Only)</h3>
+        <button class="setting-btn reset-btn" onclick="resetApp()">Reset App</button>
+    </div>
+
+    <div class="setting-card" style="text-align:center; font-size:0.9rem; color:#fff;">
+        <p>Islamic App v1.0 – Made by Bilal</p>
+        <p>Features: Quran, Juz, Dua, Tasbeeh, Qibla, Prayer Times, Hadith</p>
+    </div>
+</section>
+
+<style>
+body {
+    background: linear-gradient(135deg, #0b3d91, #1e90ff);
+    font-family: Arial, sans-serif;
+}
+
+/* Card Design with Gradient */
+.setting-card {
+    background: linear-gradient(145deg, #00b894, #006400);
+    border-radius:12px;
+    padding:15px;
+    margin:12px 20px;
+    box-shadow:0 6px 15px rgba(0,0,0,0.3);
+    transition: transform 0.3s, box-shadow 0.3s;
+    color: #fff;
+}
+.setting-card:hover {
+    transform: translateY(-5px);
+    box-shadow:0 10px 25px rgba(0,0,0,0.4);
+}
+
+/* Buttons Gradient */
+.setting-btn, .setting-btn-small {
+    padding:10px 20px;
+    border:none;
+    border-radius:8px;
+    background: linear-gradient(135deg, #228B22, #32CD32);
+    color:white;
+    font-size:1rem;
+    cursor:pointer;
+    box-shadow:0 3px 6px rgba(0,0,0,0.3);
+    transition: background 0.3s, transform 0.2s;
+}
+.setting-btn:hover, .setting-btn-small:hover {
+    background: linear-gradient(135deg, #32CD32, #228B22);
+    transform: scale(1.05);
+}
+
+/* Small Buttons */
+.setting-btn-small { font-size:0.9rem; padding:8px 15px; }
+
+/* Reset Button Gradient */
+.reset-btn {
+    background: linear-gradient(135deg, #B22222, #FF6347);
+}
+.reset-btn:hover {
+    background: linear-gradient(135deg, #FF4500, #B22222);
+}
+
+/* Dark Mode Overrides */
+.dark-mode body {
+    background: linear-gradient(135deg, #0c2d5e, #0a52a0);
+}
+.dark-mode .setting-card { 
+    background: linear-gradient(145deg, #2c3e50, #34495e); 
+    color:#f5f5f5;
+    box-shadow:0 6px 15px rgba(0,0,0,0.5);
+}
+.dark-mode .setting-btn, .dark-mode .setting-btn-small { 
+    background: linear-gradient(135deg, #1e8449, #27ae60); 
+}
+.dark-mode .reset-btn { 
+    background: linear-gradient(135deg, #8B0000, #B22222); 
+}
+</style>
+
+<script>
+// ===== Dark Mode =====
+function toggleTheme(){
+    document.body.classList.toggle('dark-mode');
+}
+
+// ===== Notifications =====
+let notificationsEnabled = false;
+function toggleNotifications(){
+    notificationsEnabled = !notificationsEnabled;
+    alert('Notifications ' + (notificationsEnabled ? 'Enabled' : 'Disabled'));
+}
+
+// ===== Font Size =====
+let fontSize = 16;
+function increaseFont(){
+    fontSize += 2;
+    document.querySelectorAll('section, p, div').forEach(el=>el.style.fontSize=fontSize+'px');
+}
+function decreaseFont(){
+    if(fontSize>10){
+        fontSize -= 2;
+        document.querySelectorAll('section, p, div').forEach(el=>el.style.fontSize=fontSize+'px');
+    }
+}
+
+// ===== Audio Autoplay =====
+let autoplay = false;
+function toggleAutoplay(){
+    autoplay = !autoplay;
+    alert('Audio autoplay ' + (autoplay ? 'Enabled' : 'Disabled'));
+}
+
+// ===== Reset App (Owner Only) =====
+function resetApp(){
+    if(confirm("Are you sure you want to reset the app?")){
+        localStorage.clear();
+        location.reload();
+    }
+}
+</script>

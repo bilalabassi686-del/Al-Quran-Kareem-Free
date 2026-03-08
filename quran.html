@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title> Qur'an Kareem - Surah List</title>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&display=swap" rel="stylesheet">
+<style>
+/* Body & Background Gradient */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #a1c4fd, #c2e9fb);
+}
+
+/* Header */
+header {
+    background: linear-gradient(90deg, #006400, #228B22);
+    color: white;
+    text-align: center;
+    padding: 20px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+}
+
+/* Search Box */
+#searchInput {
+    width: 90%;
+    max-width: 400px;
+    padding: 12px 15px;
+    margin: 20px auto;
+    display: block;
+    border-radius: 12px;
+    border: none;
+    font-size: 1rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    background: linear-gradient(120deg, #ffffff, #e6f0ff);
+}
+
+
+
+
+/* Surah List Container */
+.surah-list {
+    padding: 20px;
+}
+
+/* Surah Card - Gradient + 3D Shadow */
+.surah-item {
+    background: linear-gradient(135deg, #a8ff78, #78ffd6);
+    margin-bottom: 15px;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.surah-item:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.3);
+}
+
+
+.surah-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+}
+
+/* Arabic & English Text */
+.surah-item .arabic {
+    font-family: 'Amiri', serif;
+    font-size: 1.5rem;
+    color: #000;
+    direction: rtl;
+    text-align: right;
+}
+.surah-item .english {
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+/* Reader Page */
+#reader {
+    display: none;
+    padding: 20px;
+}
+#title {
+    font-size: 1.5rem;
+    text-align: center;
+    margin-bottom: 20px;
+}
+#arabic {
+    font-family: 'Amiri', serif;
+    font-size: 1.5rem;
+    line-height: 2;
+    direction: rtl;
+    text-align: right;
+    margin-bottom: 20px;
+}
+audio {
+    width: 100%;
+    margin-bottom: 20px;
+}
+button {
+    background: linear-gradient(90deg, #006400, #228B22);
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+button:hover { 
+    background: linear-gradient(90deg, #228B22, #006400); 
+}
+</style>
+</head>
+<body>
+
+<header> Qur'an Kareem - Surah List</header>
+
+<!-- Search Box -->
+<input type="text" id="searchInput" placeholder="Search Surah...">
+
+<!-- Surah List -->
+<div class="surah-list" id="surahList"></div>
+
+<!-- Surah Reader -->
+<div id="reader">
+    <div id="title"></div>
+    <div id="arabic"></div>
+    <audio id="audio" controls></audio>
+    <button onclick="backToList()"> Back to Surah List</button>
+</div>
+
+<script>
+const surahListDiv = document.getElementById('surahList');
+const reader = document.getElementById('reader');
+const title = document.getElementById('title');
+const arabic = document.getElementById('arabic');
+const audio = document.getElementById('audio');
+
+// Load Surah List
+function loadSurahList() {
+    fetch("https://api.alquran.cloud/v1/surah")
+    .then(r => r.json())
+    .then(d => {
+        let html = '';
+        d.data.forEach(s => {
+            html += `
+            <div class="surah-item" onclick="openSurah(${s.number})">
+                <div class="english">${s.number}. ${s.englishName} (${s.englishNameTranslation})</div>
+                <div class="arabic">${s.name}</div>
+            </div>`;
+        });
+        surahListDiv.innerHTML = html;
+    });
+}
+
+// Open Surah
+function openSurah(num) {
+    surahListDiv.style.display = 'none';
+    reader.style.display = 'block';
+    title.innerText = 'Loading...';
+    arabic.innerHTML = '';
+    audio.style.display = 'none';
+
+    fetch(`https://api.alquran.cloud/v1/surah/${num}/quran-uthmani`)
+    .then(r => r.json())
+    .then(d => {
+        title.innerText = `${d.data.number}. ${d.data.englishName} (${d.data.englishNameTranslation})`;
+        let text = '';
+        d.data.ayahs.forEach(a => {
+            text += `<div class="arabic">${a.text}</div>`;
+        });
+        arabic.innerHTML = text;
+        audio.src = `https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/${num}.mp3`;
+        audio.style.display = 'block';
+    });
+}
+
+// Back to List
+function backToList() {
+    reader.style.display = 'none';
+    surahListDiv.style.display = 'block';
+}
+
+// Search Function
+document.getElementById('searchInput').addEventListener('input', function(){
+    const query = this.value.toLowerCase();
+    const items = document.querySelectorAll('.surah-item');
+    items.forEach(item => {
+        const text = item.innerText.toLowerCase();
+        if(text.includes(query)) {
+            item.style.display = 'block';
+        } else {
+            item.style.display = 'none';
+        }
+    });
+});
+
+loadSurahList();
+</script>
+
+</body>
+</html>
